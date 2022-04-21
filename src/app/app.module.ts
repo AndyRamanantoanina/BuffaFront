@@ -15,6 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { AssignmentsComponent } from './assignments/assignments.component';
 import { RenduDirective } from './shared/rendu.directive';
@@ -33,29 +34,30 @@ import { LoginComponent } from './login/login.component';
 
 const routes:Routes = [
   {
-    path:"",
+    path:'',
     component: LoginComponent
   },
   {
-    path:"home",
-    component: AssignmentsComponent
-  },
-  {
-    path:"add",
-    component: AddAssignmentComponent
-  },
-  {
-    path:"assignment/:id",
-    component: AssignmentDetailComponent
-  },
-  {
-    path:"assignment/:id/edit",
-    component: EditAssignmentComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path:"login",
-    component: LoginComponent,
+    path: '',
+    canActivate: [AuthGuard],
+    children : [
+      {
+        path:"home",
+        component: AssignmentsComponent
+      },
+      {
+        path:"add",
+        component: AddAssignmentComponent
+      },
+      {
+        path:"assignment/:id",
+        component: AssignmentDetailComponent
+      },
+      {
+        path:"assignment/:id/edit",
+        component: EditAssignmentComponent,
+      }
+    ]
   }
 ]
 @NgModule({
@@ -72,7 +74,7 @@ const routes:Routes = [
   imports: [
     BrowserModule, FormsModule,
     BrowserAnimationsModule, MatButtonModule, MatIconModule, MatDividerModule,
-    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,
+    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatSnackBarModule,
     MatListModule, MatCardModule, MatCheckboxModule, MatSlideToggleModule, MatTableModule,
     RouterModule.forRoot(routes), HttpClientModule, ScrollingModule
   ],

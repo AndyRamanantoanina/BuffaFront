@@ -12,13 +12,21 @@ export class AuthService {
   ) { }
 
   public login(login: any) {
-    const data = this.http.post(this.myurl + "/api/login", login);
+    const data = this.http.post(this.myurl + "api/login", login);
     return data;
   }
 
-
   setToken(token:string) {
     localStorage.setItem('access_token', token);
+  }
+
+  setUtilisateur(utilisateur:any) {
+    localStorage.setItem('utilisateur', JSON.stringify(utilisateur));
+  }
+
+  isAdmin() {
+    let isUserAdmin = JSON.parse(localStorage.getItem('utilisateur') || '{}');
+    return isUserAdmin.isAdmin;
   }
 
   getToken():any {

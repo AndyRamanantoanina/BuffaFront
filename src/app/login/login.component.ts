@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
 import { Router } from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -9,9 +10,14 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
+  login!: string;
+  motDePasse!: string;
+
+
   constructor(
     private router: Router,
-    private auth: AuthService) {
+    private auth: AuthService,
+    private snackbar: MatSnackBar) {
     
    }
 
@@ -19,8 +25,38 @@ export class LoginComponent implements OnInit {
     if(this.auth.isLoggedIn()) {
       this.router.navigate(['./home']);
     } else {
-    }
       this.router.navigate(['/']);
+    }
+  }
+
+  seConnecter() {
+    const loginForm = {
+      'email': this.login,
+      'password': this.motDePasse
+    }
+    console.log(loginForm);
+
+    this.auth.login(loginForm).subscribe({
+      next: response => {
+        // @ts-ignore
+        this.auth.setToken(response.token);
+        // @ts-ignore
+        this.auth.setUtilisateur(response.user);
+        this.router.navigate(['./home']);
+      },
+      error: () => {
+        var message = "Verifier votre login ou mot de passe";
+        this.snackbar.open(message, '',  {
+          duration : 2000,
+          verticalPosition: 'top',
+          panelClass: ['mat-toolbar', 'mat-primary']
+        });
+      }
+    }) 
+  }
+
+  onSubmit() {
+    this.seConnecter();
   }
 
 }
